@@ -1,0 +1,36 @@
+pip install pygame
+import pygame
+import sys
+
+# 初期設定
+pygame.init()
+screen = pygame.display.set_mode((400, 600))
+clock = pygame.time.Clock()
+
+# プレイヤーの初期値
+player_x, player_y = 200, 500
+bullets = []
+
+while True:
+    screen.fill((0, 0, 0)) # 画面を黒で塗りつぶす
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit(); sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                bullets.append([player_x, player_y]) # 弾の発射
+
+    # キー操作
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]: player_x -= 5
+    if keys[pygame.K_RIGHT]: player_x += 5
+
+    # 描画
+    pygame.draw.rect(screen, (0, 255, 0), (player_x, player_y, 40, 40))
+    for b in bullets:
+        b[1] -= 10 # 弾を上に移動
+        pygame.draw.rect(screen, (255, 255, 0), (b[0], b[1], 10, 10))
+
+    pygame.display.flip()
+    clock.tick(60)
